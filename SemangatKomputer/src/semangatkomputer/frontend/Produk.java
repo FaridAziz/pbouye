@@ -1,13 +1,78 @@
 package semangatkomputer.frontend;
 
-import semangatkomputer.backend.Pelanggan;
+import semangatkomputer.backend.*;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 public class Produk extends javax.swing.JFrame {
 
     public Produk() {
         initComponents();
+        tampilkanData();
+        tampilkanCmbProcessor();
+        tampilkanCmbRam();
+        tampilkanCmbVga();
+        kosongkanForm();
+    }
+    public void kosongkanForm() {
+        jTextFieldID.setText("0");
+        jTextFieldJenis.setText("");
+        jTextFieldMerk.setText("");
+        jComboBoxProc.setSelectedIndex(0);
+        jComboBoxRam.setSelectedIndex(0);
+        jComboBoxVGA.setSelectedIndex(0);
+        jTextFieldHarga.setText("");
+    }
+    
+    public void tampilkanData() {
+        String[] kolom = {"ID", "Jenis Barang", "Merk Barang", "Processor", "Ram", "VGA", "Harga"};
+        ArrayList<Laptop> list = new Laptop().getAll();
+        Object rowData[] = new Object[7];
+        
+        jTable1.setModel(new DefaultTableModel(new Object[][] {}, kolom));
+        
+        for(int i = 0; i < list.size(); i++) {
+            rowData[0] = list.get(i).getId_produk();
+            rowData[1] = list.get(i).getJenis();
+            rowData[2] = list.get(i).getMerk();
+            rowData[3] = list.get(i).getProc().getMerk();
+            rowData[4] = list.get(i).getRam().getKapasitas();
+            rowData[5] = list.get(i).getVga().getBrand();
+            rowData[6] = list.get(i).getHarga();
+            
+            ((DefaultTableModel)jTable1.getModel()).addRow(rowData);
+        }
+    }
+    
+    public void cari(String keyword) {
+        String[] kolom = {"ID", "Jenis Barang", "Merk Barang", "Processor", "Ram", "VGA", "Harga"};
+        ArrayList<Laptop> list = new Laptop().search(keyword);
+        Object rowData[] = new Object[7];
+        
+        jTable1.setModel(new DefaultTableModel(new Object[][] {}, kolom));
+        
+        for(Laptop l : list) {
+            rowData[0] = l.getId_produk();
+            rowData[1] = l.getJenis();
+            rowData[2] = l.getMerk();
+            rowData[3] = l.getProc().getMerk();
+            rowData[4] = l.getRam().getKapasitas();
+            rowData[5] = l.getVga().getBrand();
+            rowData[6] = l.getHarga();
+            
+            ((DefaultTableModel)jTable1.getModel()).addRow(rowData);
+        }
+    }
+    
+    public void tampilkanCmbProcessor () {
+        jComboBoxProc.setModel(new DefaultComboBoxModel(new Processor().getAll().toArray()));
+    }
+    public void tampilkanCmbRam () {
+        jComboBoxRam.setModel(new DefaultComboBoxModel(new Ram().getAll().toArray()));
+    }
+    public void tampilkanCmbVga () {
+        jComboBoxVGA.setModel(new DefaultComboBoxModel(new Vga().getAll().toArray()));
     }
 
     @SuppressWarnings("unchecked")
@@ -16,23 +81,26 @@ public class Produk extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldID = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextFieldJenis = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextFieldMerk = new javax.swing.JTextField();
+        jTextFieldHarga = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        txtcari = new javax.swing.JTextField();
-        search = new javax.swing.JButton();
+        jButtonSimpan = new javax.swing.JButton();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
+        jTextFiledCari = new javax.swing.JTextField();
+        jButtonSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBoxProc = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBoxRam = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jComboBoxVGA = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,49 +109,82 @@ public class Produk extends javax.swing.JFrame {
 
         jLabel2.setText("ID Produk ");
 
-        jTextField1.setEditable(false);
+        jTextFieldID.setEditable(false);
 
         jLabel3.setText("Jenis Barang");
 
         jLabel4.setText("Merk Barang");
 
-        jLabel5.setText("Jumlah");
-
         jLabel6.setText("Harga");
 
-        jButton1.setText("SIMPAN");
-
-        jButton2.setText("TAMBAH BARU");
-
-        jButton3.setText("HAPUS");
-
-        txtcari.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSimpan.setText("SIMPAN");
+        jButtonSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcariActionPerformed(evt);
+                jButtonSimpanActionPerformed(evt);
             }
         });
 
-        search.setText("CARI");
-        search.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAdd.setText("TAMBAH BARU");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchActionPerformed(evt);
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
+        jButtonDelete.setText("HAPUS");
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
+
+        jTextFiledCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFiledCariActionPerformed(evt);
+            }
+        });
+
+        jButtonSearch.setText("CARI");
+        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchActionPerformed(evt);
             }
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Jenis Barang", "Merk Barang", "Processor", "Ram", "Vga", "Jumlah", "Harga"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxProc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel7.setText("Processor");
+
+        jLabel8.setText("Ram");
+
+        jComboBoxRam.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel9.setText("VGA");
+
+        jComboBoxVGA.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxVGA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxVGAActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,35 +203,46 @@ public class Produk extends javax.swing.JFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
+                                    .addComponent(jLabel7))
                                 .addGap(95, 95, 95)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField3)
+                                    .addComponent(jTextFieldJenis)
+                                    .addComponent(jTextFieldMerk)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jComboBoxProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jButton1)
-                                            .addGap(43, 43, 43)
-                                            .addComponent(jButton2)
-                                            .addGap(50, 50, 50)
-                                            .addComponent(jButton3)
-                                            .addGap(51, 51, 51)
-                                            .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(search))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(128, 128, 128)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(170, 170, 170)
+                                                .addComponent(jComboBoxRam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(2, 2, 2)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jButtonSimpan)
+                                                        .addGap(41, 41, 41)
+                                                        .addComponent(jButtonAdd)
+                                                        .addGap(50, 50, 50)
+                                                        .addComponent(jButtonDelete)
+                                                        .addGap(50, 50, 50)
+                                                        .addComponent(jTextFiledCari, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jLabel8)
+                                                            .addComponent(jLabel9)
+                                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGap(126, 126, 126)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jComboBoxVGA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(jTextFieldHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonSearch)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
@@ -139,51 +251,109 @@ public class Produk extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldJenis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldMerk, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBoxProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)))
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxRam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxVGA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jTextFieldHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFiledCari, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcariActionPerformed
+    private void jTextFiledCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFiledCariActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtcariActionPerformed
+    }//GEN-LAST:event_jTextFiledCariActionPerformed
 
-    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        cari(txtcari.getText());
-    }//GEN-LAST:event_searchActionPerformed
+    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+        cari(jTextFiledCari.getText());
+    }//GEN-LAST:event_jButtonSearchActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        int row = jTable1.getSelectedRow();
+        Laptop l = new Laptop();
+        
+        l = l.getById(Integer.parseInt(model.getValueAt(row, 0).toString()));
+
+        jTextFieldID.setText(String.valueOf(l.getId_produk()));
+        jTextFieldJenis.setText(l.getJenis());
+        jTextFieldMerk.setText(l.getMerk());
+        jComboBoxProc.getModel().setSelectedItem(l.getProc());
+        jComboBoxRam.getModel().setSelectedItem(l.getRam());
+        jComboBoxVGA.getModel().setSelectedItem(l.getVga());
+        jTextFieldHarga.setText(String.valueOf(l.getHarga()));
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButtonSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSimpanActionPerformed
+        Laptop l = new Laptop();
+        l.setId_produk(Integer.parseInt(jTextFieldID.getText()));
+        l.setJenis(jTextFieldJenis.getText());
+        l.setMerk(jTextFieldMerk.getText());
+        l.setProc((Processor)jComboBoxProc.getSelectedItem());
+        l.setRam((Ram)jComboBoxRam.getSelectedItem());
+        l.setVga((Vga)jComboBoxVGA.getSelectedItem());
+        l.setHarga(Integer.parseInt(jTextFieldHarga.getText())); 
+        l.save();
+        jTextFieldID.setText(Integer.toString(l.getId_produk()));
+        tampilkanData();
+    }//GEN-LAST:event_jButtonSimpanActionPerformed
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        // TODO add your handling code here:
+        kosongkanForm();
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        int row = jTable1.getSelectedRow();
+
+        Laptop l = new Laptop().getById(Integer.parseInt(model.getValueAt(row, 0).toString()));
+        l.delete();
+        kosongkanForm();
+        tampilkanData();
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
+
+    private void jComboBoxVGAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxVGAActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxVGAActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -218,42 +388,28 @@ public class Produk extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonDelete;
+    private javax.swing.JButton jButtonSearch;
+    private javax.swing.JButton jButtonSimpan;
+    private javax.swing.JComboBox<String> jComboBoxProc;
+    private javax.swing.JComboBox<String> jComboBoxRam;
+    private javax.swing.JComboBox<String> jComboBoxVGA;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JButton search;
-    private javax.swing.JTextField txtcari;
+    private javax.swing.JTextField jTextFieldHarga;
+    private javax.swing.JTextField jTextFieldID;
+    private javax.swing.JTextField jTextFieldJenis;
+    private javax.swing.JTextField jTextFieldMerk;
+    private javax.swing.JTextField jTextFiledCari;
     // End of variables declaration//GEN-END:variables
 
-    private void cari(String text) {
-//        String[] kolom = {"ID", "Kategori", "Judul", "Penulis", "Penerbit"};
-//        ArrayList<Buku> list = new Buku().search(keyword);
-//        Object rowData[] = new Object[5];
-//        
-//        tblBuku.setModel(new DefaultTableModel(new Object[][] {}, kolom));
-//        
-//        for(Buku buku : list) {
-//            rowData[0] = buku.getIdbuku();
-//            rowData[1] = buku.getKategori().getNama();
-//            rowData[2] = buku.getJudul();
-//            rowData[3] = buku.getPenulis();
-//            rowData[4] = buku.getPenerbit();
-//            
-//            ((DefaultTableModel)tblBuku.getModel()).addRow(rowData);
-//        }
-    }
 }

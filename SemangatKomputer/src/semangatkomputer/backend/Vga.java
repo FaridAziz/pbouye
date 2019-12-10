@@ -5,33 +5,34 @@ import java.util.ArrayList;
 
 public class Vga {
     private int id_vga;
-    private String merk;
+    private String brand;
     private String memory;
     
     public Vga() {
     }
 
-    public Vga(int id_vga, String merk, String memory) {
+    public Vga(int id_vga, String brand, String memory) {
         this.id_vga = id_vga;
-        this.merk = merk;
+        this.brand = brand;
         this.memory = memory;
     }
-    
-    public int getIdVga() {
+
+    public int getId_vga() {
         return id_vga;
     }
 
-    public void setIdVga(int id_vga) {
+    public void setId_vga(int id_vga) {
         this.id_vga = id_vga;
     }
-
-    public String getMerk() {
-        return merk;
+    
+    public String getBrand() {
+        return brand;
     }
 
-    public void setMerk(String merk) {
-        this.merk = merk;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
+
 
     public String getMemory() {
         return memory;
@@ -48,8 +49,8 @@ public class Vga {
         try {
             while (rs.next()) {
                 v = new Vga();
-                v.setIdVga(rs.getInt("id_vga"));
-                v.setMerk(rs.getString("merk"));
+                v.setId_vga(rs.getInt("id_vga"));
+                v.setBrand(rs.getString("brand"));
                 v.setMemory(rs.getString("memory"));
             }
         } catch (Exception e) {
@@ -66,8 +67,8 @@ public class Vga {
         try {
             while (rs.next()) {
                 Vga v = new Vga();
-                v.setIdVga(rs.getInt("id_vga"));
-                v.setMerk(rs.getString("merk"));
+                v.setId_vga(rs.getInt("id_vga"));
+                v.setBrand(rs.getString("brand"));
                 v.setMemory(rs.getString("memory"));
 
                 ListVga.add(v);
@@ -81,15 +82,15 @@ public class Vga {
 
     
     public void save(){
-        if(getById(id_vga).getIdVga() == 0){
-            String SQL = "Insert into vga (merk,memory) values(" 
-                    + " '" +this.merk + "', "
+        if(getById(id_vga).getId_vga()== 0){
+            String SQL = "Insert into vga (brand,memory) values(" 
+                    + " '" +this.brand + "', "
                     + " '"+this.memory+"' "
                     + " )";
                     this.id_vga = Koneksi.insertQueryGetId(SQL);
         }else{
             String SQL = "Update vga set"
-                   + " merk = '" +this.merk +"', "
+                   + " brand = '" +this.brand +"', "
                    + " memory = '"+this.memory+"' "
                    +"Where id_vga = '"+this.id_vga+"'";
             Koneksi.executeQuery(SQL);
@@ -101,9 +102,9 @@ public class Vga {
         Koneksi.executeQuery(SQL);
     }
     
-    @Override
-    public String toString() {
-        return merk;
-    }
+//    @Override
+//    public String toString() {
+//        return merk;
+//    }
     
 }
