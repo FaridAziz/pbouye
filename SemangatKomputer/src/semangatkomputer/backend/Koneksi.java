@@ -24,6 +24,22 @@ public class Koneksi {
         }
     }
     
+    public static Connection getConnection(){
+         if(koneksi == null){
+            try{
+                String url = "jdbc:mysql://localhost:3306/semangatkomputer";
+                String user = "root";
+                String password = "";
+                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+                koneksi = DriverManager.getConnection(url, user, password);
+            }
+            catch (SQLException t){
+                System.out.println("Error koneksi!");
+            }
+        }
+        return koneksi;
+    }
+    
     public static int insertQueryGetId(String query){
         bukaKoneksi();
         int num = 0;

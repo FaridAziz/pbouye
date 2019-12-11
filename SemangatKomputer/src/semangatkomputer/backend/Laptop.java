@@ -3,9 +3,8 @@ package semangatkomputer.backend;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class Laptop extends Komputer implements IBenchmark{
+public class Laptop extends Komputer{
     private int id_produk;
-    private String jenis;
     private int harga;
     private Processor proc = new Processor();
     private Vga vga = new Vga();
@@ -14,11 +13,12 @@ public class Laptop extends Komputer implements IBenchmark{
     public Laptop(){
         
     }
-    public Laptop(String merk, Processor proc, Vga vga, Ram ram){
+    public Laptop(String merk, Processor proc, Vga vga, Ram ram, int harga){
         this.merk = merk;
         this.proc = proc;
         this.vga = vga;
         this.ram = ram;
+        this.harga = harga;
     }
 
     @Override
@@ -31,10 +31,12 @@ public class Laptop extends Komputer implements IBenchmark{
         this.merk = merk;
     }
 
+    @Override
     public String getJenis() {
         return jenis;
     }
 
+    @Override
     public void setJenis(String jenis) {
         this.jenis = jenis;
     }
@@ -56,7 +58,6 @@ public class Laptop extends Komputer implements IBenchmark{
         this.harga = harga;
     }
     
-
     public Processor getProc() {
         return proc;
     }
@@ -79,16 +80,6 @@ public class Laptop extends Komputer implements IBenchmark{
 
     public void setRam(Ram ram) {
         this.ram = ram;
-    }
-
-    @Override
-    public void highend() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void lowend() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public Laptop getById(int id) {
@@ -260,4 +251,9 @@ public class Laptop extends Komputer implements IBenchmark{
         String SQL = "DELETE FROM produk WHERE id_produk = '" + this.id_produk + "'";
         Koneksi.executeQuery(SQL);
     }
+    @Override
+    public String toString() {
+        return merk;
+    }
+    
 }

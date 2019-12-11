@@ -102,9 +102,9 @@ public class Vga {
         Koneksi.executeQuery(SQL);
     }
     
-//    @Override
-//    public String toString() {
-//        return merk;
-//    }
+    @Override
+    public String toString() {
+        return brand;
+    }
     
 }

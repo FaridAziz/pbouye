@@ -12,8 +12,7 @@ public class Pelanggan {
     public Pelanggan(){
         
     }
-    public Pelanggan(int idpelanggan, String nama, String email, String telepon){
-        this.idpelanggan = idpelanggan;
+    public Pelanggan(String nama, String email, String telepon){
         this.nama = nama;
         this.email = email;
         this.telepon = telepon;
@@ -135,5 +134,35 @@ public class Pelanggan {
     public void delete(){
         String SQL = "DELETE FROM pelanggan WHERE id_pelanggan = '"+this.idpelanggan+"'";
         Koneksi.executeQuery(SQL);
+    }
+    @Override
+    public String toString() {
+        return nama;
+    }
+    public ArrayList<Pelanggan> getByNamaAndEmailAndTelepon(String nama, String email, String telepon) {
+        ArrayList<Pelanggan> ListPelanggan = new ArrayList();
+        ResultSet rs;
+        if ((nama.trim().length() > 0) && (email.trim().length() > 0) && (telepon.trim().length() > 0)) {
+            rs = Koneksi.selectQuery("SELECT * FROM pelanggan Where nama_pelanggan = '" + nama + "' and email = '" + email + "' and telepon = '" + telepon + "'");
+        } else if ((nama.trim().length() > 0) && (email.trim().length() > 0) && (telepon.trim().length() == 0)) {
+            rs = Koneksi.selectQuery("SELECT * FROM pelanggan Where nama_pelanggan = '" + nama + "' and email = '" + email + "'");
+        } else if ((nama.trim().length() > 0) && (email.trim().length() == 0)) {
+            rs = Koneksi.selectQuery("SELECT * FROM pelanggan Where nama_pelanggan = '" + nama +"'");
+        } else {
+            rs = Koneksi.selectQuery("SELECT * FROM pelanggan Where email = '" + email + "'");
+        }
+        try {
+            while (rs.next()) {
+                Pelanggan ang = new Pelanggan();
+                ang.setIdpelanggan(rs.getInt("id_pelanggan"));
+                ang.setNama(rs.getString("nama_pelanggan"));
+                ang.setEmail(rs.getString("email"));
+                ang.setTelepon(rs.getString("telepon"));
+                ListPelanggan.add(ang);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ListPelanggan;
     }
 }
